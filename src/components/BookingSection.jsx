@@ -40,13 +40,16 @@ const BookingSection = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/book", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      });
+      const response = await fetch(
+        "https://amravatitaxibackendproject.onrender.com/api/book", // ✅ FIXED
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        }
+      );
 
       if (response.ok) {
         setMessage("✅ Booking Successful!");
@@ -65,14 +68,14 @@ const BookingSection = () => {
         setTripType("");
         setCarType("");
 
-        // Auto hide message
-        setTimeout(() => {
-          setMessage("");
-        }, 3000);
-
       } else {
         setMessage("❌ Booking Failed");
       }
+
+      // Auto hide message
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
 
     } catch (error) {
       console.error(error);
@@ -85,7 +88,7 @@ const BookingSection = () => {
 
       <h1 className="text-2xl sm:text-5xl font-bold mb-3 text-center">
         Call Anytime : +
-        <span className="text-blue-400">91 7057540811 </span>
+        <span className="text-blue-400">91 7057540811</span>
       </h1>
 
       <p className="text-sm sm:text-lg mb-6 text-gray-300 text-center flex items-center justify-center gap-2">
@@ -100,6 +103,7 @@ const BookingSection = () => {
           {["oneway", "round", "local"].map((type) => (
             <button
               key={type}
+              type="button"
               onClick={() => setTripType(type)}
               className={`py-2 rounded-lg text-sm font-medium transition 
                 ${tripType === type 
@@ -113,11 +117,12 @@ const BookingSection = () => {
           ))}
         </div>
 
-        {/* AC / Non-AC */}
+        {/* Car Type */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           {["ac", "nonac"].map((type) => (
             <button
               key={type}
+              type="button"
               onClick={() => setCarType(type)}
               className={`py-2 rounded-lg text-sm font-medium transition 
                 ${carType === type 
@@ -136,7 +141,7 @@ const BookingSection = () => {
           value={formData.name}
           onChange={handleChange}
           placeholder="Your Name"
-          className="w-full bg-gray-700 px-4 py-3 mb-3 rounded-lg text-sm sm:text-base"
+          className="w-full bg-gray-700 px-4 py-3 mb-3 rounded-lg"
         />
 
         {/* Mobile + Car */}
@@ -148,14 +153,14 @@ const BookingSection = () => {
             value={formData.mobile}
             onChange={handleChange}
             placeholder="Mobile"
-            className="bg-gray-700 px-4 py-3 rounded-lg text-sm sm:text-base"
+            className="bg-gray-700 px-4 py-3 rounded-lg"
           />
 
           <select
             name="car"
             value={formData.car}
             onChange={handleChange}
-            className="bg-gray-700 px-4 py-3 rounded-lg text-sm sm:text-base"
+            className="bg-gray-700 px-4 py-3 rounded-lg"
           >
             <option value="">Select Car</option>
             <option value="Dzire">Dzire</option>
@@ -174,7 +179,7 @@ const BookingSection = () => {
             value={formData.fromLocation}
             onChange={handleChange}
             placeholder="From"
-            className="bg-transparent w-full outline-none text-sm sm:text-base"
+            className="bg-transparent w-full outline-none"
           />
         </div>
 
@@ -187,7 +192,7 @@ const BookingSection = () => {
             value={formData.toLocation}
             onChange={handleChange}
             placeholder="To"
-            className="bg-transparent w-full outline-none text-sm sm:text-base"
+            className="bg-transparent w-full outline-none"
           />
         </div>
 
@@ -201,7 +206,7 @@ const BookingSection = () => {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="bg-transparent w-full text-sm sm:text-base"
+              className="bg-transparent w-full"
             />
           </div>
 
@@ -212,7 +217,7 @@ const BookingSection = () => {
               name="time"
               value={formData.time}
               onChange={handleChange}
-              className="bg-transparent w-full text-sm sm:text-base"
+              className="bg-transparent w-full"
             />
           </div>
 
@@ -220,7 +225,7 @@ const BookingSection = () => {
 
         {/* Message */}
         {message && (
-          <div className="mb-4 text-center text-sm sm:text-base font-medium bg-green-600/20 text-green-400 py-2 rounded">
+          <div className="mb-4 text-center bg-green-600/20 text-green-400 py-2 rounded">
             {message}
           </div>
         )}
@@ -228,7 +233,7 @@ const BookingSection = () => {
         {/* Button */}
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
         >
           BOOK NOW
         </button>
