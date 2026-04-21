@@ -6,6 +6,7 @@ const BookingSection = () => {
   const [tripType, setTripType] = useState("");
   const [carType, setCarType] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -33,6 +34,11 @@ const BookingSection = () => {
       return;
     }
 
+    if (formData.mobile.length !== 10) {
+      setMessage("⚠️ Enter valid 10 digit mobile number");
+      return;
+    }
+
     const data = {
       ...formData,
       tripType,
@@ -40,8 +46,11 @@ const BookingSection = () => {
     };
 
     try {
+      setLoading(true);
+      setMessage("⏳ Booking in progress...");
+
       const response = await fetch(
-        "https://amravatitaxibackendproject.onrender.com/api/book", // ✅ FIXED
+        "https://amravatitaxibackendproject.onrender.com/api/book",
         {
           method: "POST",
           headers: {
@@ -50,6 +59,8 @@ const BookingSection = () => {
           body: JSON.stringify(data)
         }
       );
+
+      const result = await response.text();
 
       if (response.ok) {
         setMessage("✅ Booking Successful!");
@@ -69,18 +80,17 @@ const BookingSection = () => {
         setCarType("");
 
       } else {
-        setMessage("❌ Booking Failed");
+        setMessage("❌ " + result);
       }
 
-      // Auto hide message
-      setTimeout(() => {
-        setMessage("");
-      }, 3000);
-
     } catch (error) {
-      console.error(error);
-      setMessage("❌ Server Error");
+      console.error("Fetch Error:", error);
+      setMessage("❌ Server Error / CORS issue");
+    } finally {
+      setLoading(false);
     }
+
+    setTimeout(() => setMessage(""), 3000);
   };
 
   return (
@@ -233,9 +243,10 @@ const BookingSection = () => {
         {/* Button */}
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
         >
-          BOOK NOW
+          {loading ? "Processing..." : "BOOK NOW"}
         </button>
 
       </div>
