@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { MapPin, Calendar, Clock, Car } from "lucide-react";
 
 const BookingSection = () => {
-
   const [tripType, setTripType] = useState("");
   const [carType, setCarType] = useState("");
   const [message, setMessage] = useState("");
@@ -18,7 +17,7 @@ const BookingSection = () => {
     time: ""
   });
 
-  // Handle Input Change
+  // Input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -26,20 +25,19 @@ const BookingSection = () => {
     });
   };
 
-  // Submit Form
+  // Submit
   const handleSubmit = async () => {
-
     if (!formData.name || !formData.mobile) {
       setMessage("⚠️ Please fill required fields");
       return;
     }
 
-    if (formData.mobile.length !== 10) {
+    if (!/^[0-9]{10}$/.test(formData.mobile)) {
       setMessage("⚠️ Enter valid 10 digit mobile number");
       return;
     }
 
-    const data = {
+    const payload = {
       ...formData,
       tripType,
       carType
@@ -50,47 +48,45 @@ const BookingSection = () => {
       setMessage("⏳ Booking in progress...");
 
       const response = await fetch(
-        "https://amravatitaxibackendproject-2.onrender.com/api/book",
+        "https://amravatitaxibackendproject-3.onrender.com/api/book",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(payload)
         }
       );
 
-      const result = await response.text();
+      const resultText = await response.text();
 
-      if (response.ok) {
-        setMessage("✅ Booking Successful!");
-
-        // Reset Form
-        setFormData({
-          name: "",
-          mobile: "",
-          car: "",
-          fromLocation: "",
-          toLocation: "",
-          date: "",
-          time: ""
-        });
-
-        setTripType("");
-        setCarType("");
-
-      } else {
-        setMessage("❌ " + result);
+      if (!response.ok) {
+        throw new Error(resultText || "Booking failed");
       }
 
+      setMessage("✅ Booking Successful!");
+
+      // Reset form
+      setFormData({
+        name: "",
+        mobile: "",
+        car: "",
+        fromLocation: "",
+        toLocation: "",
+        date: "",
+        time: ""
+      });
+
+      setTripType("");
+      setCarType("");
+
     } catch (error) {
-      console.error("Fetch Error:", error);
-      setMessage("❌ Server Error / CORS issue");
+      console.error(error);
+      setMessage("❌ " + error.message);
     } finally {
       setLoading(false);
+      setTimeout(() => setMessage(""), 3000);
     }
-
-    setTimeout(() => setMessage(""), 3000);
   };
 
   return (
@@ -116,13 +112,9 @@ const BookingSection = () => {
               type="button"
               onClick={() => setTripType(type)}
               className={`py-2 rounded-lg text-sm font-medium transition 
-                ${tripType === type 
-                  ? "bg-blue-600 text-white" 
-                  : "bg-gray-700 text-gray-300"}`}
+              ${tripType === type ? "bg-blue-600" : "bg-gray-700"}`}
             >
-              {type === "oneway" && "One Way"}
-              {type === "round" && "Round"}
-              {type === "local" && "Local"}
+              {type}
             </button>
           ))}
         </div>
@@ -135,11 +127,9 @@ const BookingSection = () => {
               type="button"
               onClick={() => setCarType(type)}
               className={`py-2 rounded-lg text-sm font-medium transition 
-                ${carType === type 
-                  ? "bg-green-600 text-white" 
-                  : "bg-gray-700 text-gray-300"}`}
+              ${carType === type ? "bg-green-600" : "bg-gray-700"}`}
             >
-              {type === "ac" ? "AC" : "Non-AC"}
+              {type.toUpperCase()}
             </button>
           ))}
         </div>
