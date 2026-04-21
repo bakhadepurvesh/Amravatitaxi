@@ -50,7 +50,7 @@ const BookingSection = () => {
       setMessage("⏳ Booking in progress...");
 
       const response = await fetch(
-        "https://amravatitaxibackendproject.onrender.com/api/book",
+        "https://amravatitaxibackendproject-2.onrender.com/api/book",
         {
           method: "POST",
           headers: {
