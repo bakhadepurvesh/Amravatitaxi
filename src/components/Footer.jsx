@@ -58,6 +58,10 @@ const Footer = () => {
               <MapPin className="text-blue-400 w-5 h-5" />
               Amravati, India
             </li>
+            <li className="flex items-center gap-2">
+              <span className="text-blue-400 font-semibold">Developer:</span>
+              <span className="text-orange-500">Purvesh Bakhade</span>
+            </li>
           </ul>
         </div>
 
