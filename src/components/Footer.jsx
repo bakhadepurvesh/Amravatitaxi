@@ -16,7 +16,7 @@ const Footer = () => {
         <div>
           <Link to="/" className="flex items-center space-x-2">
             <Car className="w-8 h-8 text-blue-500" />
-            <span className="text-xl font-bold">AutoTaxi</span>
+            <span className="text-xl font-bold">TaxiRent</span>
           </Link>
 
           <p className="leading-relaxed my-4">
